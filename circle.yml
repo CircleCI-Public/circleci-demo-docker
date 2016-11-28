@@ -1,0 +1,33 @@
+version: 2
+executorType: docker
+containerInfo:
+  - image: golang:latest
+  - image: postgres:9.4.1
+    env:
+      - POSTGRES_USER=ubuntu
+      - POSTGRES_DB=service_test
+stages:
+  build:
+    workDir: /go/src/github.com/circleci/cci-demo-go
+    steps:
+      - type: checkout
+      - type: shell
+        command: |
+          set -eu
+          go version
+      - type: shell
+        name: "Install JUnit reporting tool and setup test path."
+        command: |
+          go get github.com/jstemmer/go-junit-report
+          mkdir -p /tmp/test-results
+      - type: shell
+        environment:
+          DATABASE_URL: "postgres://ubuntu@localhost:5432/service_test?sslmode=disable"
+        command: |
+          set -eu
+          go get -t -d -v ./...
+          export DATABASE_URL="postgres://ubuntu@localhost:5432/service_test?sslmode=disable"
+          env
+          go test -v -race ./... | go-junit-report > /tmp/test-results/unit-tests.xml
+      - type: test-results-store
+        path: /tmp/test-results
