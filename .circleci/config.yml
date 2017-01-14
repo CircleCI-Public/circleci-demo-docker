@@ -1,0 +1,29 @@
+version: 2
+jobs:
+  build:
+    pod:
+      - image: golang:1.6.2
+      - image: postgres:9.4.1
+        environment:
+          - POSTGRES_USER=ubuntu
+          - POSTGRES_DB=service_test
+    steps:
+      - checkout:
+          path: /go/src/github.com/circleci/cci-demo-go
+      - shell:
+          working_directory: /go/src/github.com/circleci/cci-demo-go
+          name: "Install JUnit & Setup Test Path"
+          command: |
+            go get github.com/jstemmer/go-junit-report
+            mkdir -p /tmp/test-results
+      - shell:
+          working_directory: /go/src/github.com/circleci/cci-demo-go
+          environment:
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/service_test?sslmode=disable"
+          command: |
+            set -eu
+            go get -t -d -v ./...
+            export DATABASE_URL="postgres://ubuntu@localhost:5432/service_test?sslmode=disable"
+            go test -v -race ./... | go-junit-report > /tmp/test-results/unit-tests.xml
+      - test_results_store:
+          path: /tmp/test-results
