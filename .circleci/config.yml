@@ -5,8 +5,8 @@ jobs:
       - image: golang:1.6.2
       - image: postgres:9.4.1
         environment:
-          - POSTGRES_USER=ubuntu
-          - POSTGRES_DB=service_test
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: service_test
     steps:
       - checkout:
           path: /go/src/github.com/circleci/cci-demo-go
