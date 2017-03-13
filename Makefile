@@ -11,6 +11,9 @@ workdir:
 
 build: workdir/service
 
+build-native: $(GOFILES)
+	go build -o workdir/native-service .
+
 workdir/service: $(GOFILES)
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o workdir/service .
 
