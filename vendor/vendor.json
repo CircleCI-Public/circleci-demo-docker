@@ -1,0 +1,87 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "OFu4xJEIjiI8Suu+j/gabfp+y6Q=",
+			"origin": "github.com/stretchr/testify/vendor/github.com/davecgh/go-spew/spew",
+			"path": "github.com/davecgh/go-spew/spew",
+			"revision": "4d4bfba8f1d1027c4fdbe371823030df51419987",
+			"revisionTime": "2017-01-30T11:31:45Z"
+		},
+		{
+			"checksumSHA1": "Y3U6on66N0BszKXYvb2Q+qpG6f4=",
+			"path": "github.com/julienschmidt/httprouter",
+			"revision": "8a45e95fc75cb77048068a62daed98cc22fdac7c",
+			"revisionTime": "2017-01-04T18:58:16Z"
+		},
+		{
+			"checksumSHA1": "JQG/9gSl4PjB+gde5cRTKimE4qE=",
+			"path": "github.com/lib/pq",
+			"revision": "e4af84aab01e159ca479940dbde304519e8e8811",
+			"revisionTime": "2017-03-09T16:49:12Z"
+		},
+		{
+			"checksumSHA1": "Gk3jTNQ5uGDUE0WMJFWcYz9PMps=",
+			"path": "github.com/lib/pq/oid",
+			"revision": "e4af84aab01e159ca479940dbde304519e8e8811",
+			"revisionTime": "2017-03-09T16:49:12Z"
+		},
+		{
+			"checksumSHA1": "TQVUJKDIG3XUeRoHwjIHHKKc6ng=",
+			"path": "github.com/mattes/migrate/driver",
+			"revision": "305a63a4472b883b8af8e0d71132e98d83a69e4d",
+			"revisionTime": "2017-03-02T21:39:55Z"
+		},
+		{
+			"checksumSHA1": "+nObsJCowmMDcsKLmjBA4P7kWf4=",
+			"path": "github.com/mattes/migrate/driver/postgres",
+			"revision": "305a63a4472b883b8af8e0d71132e98d83a69e4d",
+			"revisionTime": "2017-03-02T21:39:55Z"
+		},
+		{
+			"checksumSHA1": "HN+eI9IMaO9vQA37gCo87l/1F+A=",
+			"path": "github.com/mattes/migrate/file",
+			"revision": "305a63a4472b883b8af8e0d71132e98d83a69e4d",
+			"revisionTime": "2017-03-02T21:39:55Z"
+		},
+		{
+			"checksumSHA1": "BPqvXY8XCn7cIUZaW+mgbzHreHg=",
+			"path": "github.com/mattes/migrate/migrate",
+			"revision": "305a63a4472b883b8af8e0d71132e98d83a69e4d",
+			"revisionTime": "2017-03-02T21:39:55Z"
+		},
+		{
+			"checksumSHA1": "bIOgGoax/uGQnXHQPb+O6jC/42A=",
+			"path": "github.com/mattes/migrate/migrate/direction",
+			"revision": "305a63a4472b883b8af8e0d71132e98d83a69e4d",
+			"revisionTime": "2017-03-02T21:39:55Z"
+		},
+		{
+			"checksumSHA1": "yCWDml36DkeshgojaiAktWBt+ZQ=",
+			"path": "github.com/mattes/migrate/pipe",
+			"revision": "305a63a4472b883b8af8e0d71132e98d83a69e4d",
+			"revisionTime": "2017-03-02T21:39:55Z"
+		},
+		{
+			"checksumSHA1": "zKKp5SZ3d3ycKe4EKMNT0BqAWBw=",
+			"origin": "github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib",
+			"path": "github.com/pmezard/go-difflib/difflib",
+			"revision": "4d4bfba8f1d1027c4fdbe371823030df51419987",
+			"revisionTime": "2017-01-30T11:31:45Z"
+		},
+		{
+			"checksumSHA1": "JXUVA1jky8ZX8w09p2t5KLs97Nc=",
+			"path": "github.com/stretchr/testify/assert",
+			"revision": "4d4bfba8f1d1027c4fdbe371823030df51419987",
+			"revisionTime": "2017-01-30T11:31:45Z"
+		},
+		{
+			"checksumSHA1": "2PpOCNkWnshDrXeCVH2kp3VHhIM=",
+			"path": "github.com/stretchr/testify/require",
+			"revision": "4d4bfba8f1d1027c4fdbe371823030df51419987",
+			"revisionTime": "2017-01-30T11:31:45Z"
+		}
+	],
+	"rootPath": "github.com/circleci/cci-demo-docker"
+}
