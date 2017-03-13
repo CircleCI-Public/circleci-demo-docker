@@ -2,13 +2,14 @@ package test
 
 import (
 	"database/sql"
-	"github.com/circleci/cci-demo-go"
-	_ "github.com/mattes/migrate/driver/postgres"
-	"github.com/mattes/migrate/migrate"
-	"github.com/stretchr/testify/require"
 	"net/http/httptest"
 	"os"
 	"testing"
+
+	"github.com/circleci/cci-demo-docker"
+	_ "github.com/mattes/migrate/driver/postgres"
+	"github.com/mattes/migrate/migrate"
+	"github.com/stretchr/testify/require"
 )
 
 // Env provides access to all services used in tests, like the database, our server, and an HTTP client for performing

@@ -2,11 +2,12 @@ package service
 
 import (
 	"encoding/json"
-	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 // NewServer initializes the service with the given Database, and sets up appropriate routes.
@@ -158,4 +159,3 @@ func writeJSONNotFound(w http.ResponseWriter) {
 func writeUnexpectedError(w http.ResponseWriter, err error) {
 	writeJSONError(w, http.StatusInternalServerError, err.Error())
 }
-

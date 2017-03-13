@@ -1,12 +1,13 @@
 package service_test
 
 import (
-	"github.com/circleci/cci-demo-go"
-	"github.com/circleci/cci-demo-go/test"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"net/http"
 	"testing"
+
+	"github.com/circleci/cci-demo-docker"
+	"github.com/circleci/cci-demo-docker/test"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // Test_AddContact shows how to structure a basic service test. Notice the 'SETUP', 'TEST', and 'VERIFY' steps that

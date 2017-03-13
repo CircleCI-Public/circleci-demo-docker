@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/circleci/cci-demo-go/stringutil"
+	"github.com/circleci/cci-demo-docker/stringutil"
 )
 
 func main() {
