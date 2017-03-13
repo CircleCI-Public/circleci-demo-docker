@@ -1,6 +1,8 @@
 report.xml
 .DS_Store
 
+/workdir
+
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a

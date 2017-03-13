@@ -7,21 +7,28 @@ jobs:
         environment:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: service_test
-    working_directory: /go/src/github.com/circleci/cci-demo-go
+    working_directory: /go/src/github.com/circleci/cci-demo-docker
+
+    environment:
+      TEST_RESULTS: /tmp/test-results
+
     steps:
       - checkout
+
       - run:
           name: "Install JUnit & Setup Test Path"
           command: |
             go get github.com/jstemmer/go-junit-report
-            mkdir -p /tmp/test-results
+            mkdir -p $TEST_RESULTS
+
       - run:
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/service_test?sslmode=disable"
           command: |
             set -eu
             mkdir -p /tmp/test-results
-            go get -t -d -v ./...
-            go test -v -race ./... | go-junit-report > /tmp/test-results/unit-tests.xml
+            make test | go-junit-report > $TEST_RESULTS/go-test-report.xml
+            ls -la $TEST_RESULTS
+
       - store_test_results:
           path: /tmp/test-results
