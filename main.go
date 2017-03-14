@@ -19,12 +19,16 @@ func main() {
 }
 
 func SetupDB() *service.Database {
-	databaseUrl := os.Getenv("DATABASE_URL")
+	databaseUrl := os.Getenv("CONTACTS_DB_URL")
 	if databaseUrl == "" {
-		panic("DATABASE_URL must be set!")
+		panic("CONTACTS_DB_URL must be set!")
 	}
 
-	allErrors, ok := migrate.ResetSync(databaseUrl, "./db/migrations")
+	sqlFiles := "./db/migrations"
+	if sqlFilesEnv := os.Getenv("CONTACTS_DB_MIGRATIONS"); sqlFilesEnv != "" {
+		sqlFiles = sqlFilesEnv
+	}
+	allErrors, ok := migrate.ResetSync(databaseUrl, sqlFiles)
 	if !ok {
 		panic(fmt.Sprintf("%+v", allErrors))
 	}
