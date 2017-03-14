@@ -16,12 +16,13 @@ jobs:
       - checkout
 
       - run:
-          name: "Install JUnit & Setup Test Path"
+          name: Install JUnit & Setup Test Path
           command: |
             go get github.com/jstemmer/go-junit-report
             mkdir -p $TEST_RESULTS
 
       - run:
+          name: Run unit tests
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/service_test?sslmode=disable"
           command: |
@@ -29,6 +30,33 @@ jobs:
             mkdir -p /tmp/test-results
             make test | go-junit-report > $TEST_RESULTS/go-test-report.xml
             ls -la $TEST_RESULTS
+
+      - run:
+          name: Build service
+          command: make
+
+      - setup_docker_engine
+
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.03.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+
+      - run:
+          name: Build and push Docker image
+          command: |
+            DOCKER_TAG="0.1.${CIRCLE_BUILD_NUM}-$(git rev-parse --short HEAD)"
+            docker build -t circleci/cci-demo-docker:$DOCKER_TAG .
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+            docker push circleci/cci-demo-docker:$DOCKER_TAG
+
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: raw-test-output
 
       - store_test_results:
           path: /tmp/test-results
