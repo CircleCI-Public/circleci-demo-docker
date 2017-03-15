@@ -2,11 +2,12 @@ version: 2
 jobs:
   build:
     docker:
-      - image: golang:1.6.2
+      # using custom image, see .circleci/images/primary/Dockerfile
+      - image: circleci/cci-demo-docker-primary:0.0.2
       - image: postgres:9.4.1
         environment:
           POSTGRES_USER: ubuntu
-          POSTGRES_DB: service_test
+          POSTGRES_DB: contacts
     working_directory: /go/src/github.com/circleci/cci-demo-docker
 
     environment:
@@ -16,24 +17,33 @@ jobs:
       - checkout
 
       - run:
-          name: Install JUnit & Setup Test Path
+          name: Waiting for Postgres to be ready
           command: |
-            go get github.com/jstemmer/go-junit-report
-            mkdir -p $TEST_RESULTS
+            for i in `seq 1 10`;
+            do
+              nc -z localhost 5432 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Postgress && exit 1
+
+      - run: mkdir -p $TEST_RESULTS
 
       - run:
           name: Run unit tests
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/service_test?sslmode=disable"
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/contacts?sslmode=disable"
+            DB_MIGRATIONS: /go/src/github.com/circleci/cci-demo-docker/db/migrations
           command: |
-            set -o pipefail
-            mkdir -p /tmp/test-results
+            set -ou pipefail
+            trap "go-junit-report <${TEST_RESULTS}/go-test.out > ${TEST_RESULTS}/go-test-report.xml" EXIT
             # Notice this `set -o pipefail`, this will cause script to fail if `make test` fails
             # without this option script will return success regardless of testing result due to pipe after test command
-            make test | go-junit-report > $TEST_RESULTS/go-test-report.xml
+            make test | tee ${TEST_RESULTS}/go-test.out
 
       - setup_docker_engine
 
+      # This should go into custom primary image, here's only for the sake of explanation
       - run:
           name: Install Docker client
           command: |

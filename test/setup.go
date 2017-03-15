@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/circleci/cci-demo-docker"
+	"github.com/circleci/cci-demo-docker/service"
 	_ "github.com/mattes/migrate/driver/postgres"
 	"github.com/mattes/migrate/migrate"
 	"github.com/stretchr/testify/require"
@@ -47,7 +47,11 @@ func SetupDB(t *testing.T) *service.Database {
 	databaseUrl := os.Getenv("DATABASE_URL")
 	require.NotEmpty(t, databaseUrl, "DATABASE_URL must be set!")
 
-	allErrors, ok := migrate.ResetSync(databaseUrl, "./db/migrations")
+	sqlFiles := "./db/migrations"
+	if sqlFilesEnv := os.Getenv("DB_MIGRATIONS"); sqlFilesEnv != "" {
+		sqlFiles = sqlFilesEnv
+	}
+	allErrors, ok := migrate.ResetSync(databaseUrl, sqlFiles)
 	require.True(t, ok, "Failed to migrate database %v", allErrors)
 
 	db, err := sql.Open("postgres", databaseUrl)

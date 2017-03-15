@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/circleci/cci-demo-docker"
+	"github.com/circleci/cci-demo-docker/service"
 	"github.com/circleci/cci-demo-docker/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
