@@ -31,10 +31,6 @@ jobs:
             make test | go-junit-report > $TEST_RESULTS/go-test-report.xml
             ls -la $TEST_RESULTS
 
-      - run:
-          name: Build service
-          command: make
-
       - setup_docker_engine
 
       - run:
@@ -47,12 +43,16 @@ jobs:
             mv /tmp/docker/* /usr/bin
 
       - run:
+          name: Build service
+          command: make
+
+      - run:
           name: Build and push Docker image
           command: |
-            DOCKER_TAG="0.1.${CIRCLE_BUILD_NUM}-$(git rev-parse --short HEAD)"
-            docker build -t circleci/cci-demo-docker:$DOCKER_TAG .
+            TAG="0.1.${CIRCLE_BUILD_NUM}"
+            docker build -t circleci/cci-demo-docker:$TAG .
             docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
-            docker push circleci/cci-demo-docker:$DOCKER_TAG
+            docker push circleci/cci-demo-docker:$TAG
 
       - store_artifacts:
           path: /tmp/test-results
