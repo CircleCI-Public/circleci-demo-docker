@@ -26,10 +26,11 @@ jobs:
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/service_test?sslmode=disable"
           command: |
-            set -eu
+            set -o pipefail
             mkdir -p /tmp/test-results
+            # Notice this `set -o pipefail`, this will cause script to fail if `make test` fails
+            # without this option script will return success regardless of testing result due to pipe after test command
             make test | go-junit-report > $TEST_RESULTS/go-test-report.xml
-            ls -la $TEST_RESULTS
 
       - setup_docker_engine
 
