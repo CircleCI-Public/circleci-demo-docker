@@ -41,7 +41,7 @@ jobs:
             # without this option script will return success regardless of testing result due to pipe after test command
             make test | tee ${TEST_RESULTS}/go-test.out
 
-      - setup_docker_engine
+      - setup_remote_docker
 
       # This should go into custom primary image, here's only for the sake of explanation
       - run:
