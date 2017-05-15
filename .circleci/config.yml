@@ -42,6 +42,9 @@ jobs:
             make test | tee ${TEST_RESULTS}/go-test.out
 
       - setup_remote_docker
+          reusable: true    # default - false
+          exclusive: true   # default - true
+
 
       # This should go into custom primary image, here's only for the sake of explanation
       - run:
