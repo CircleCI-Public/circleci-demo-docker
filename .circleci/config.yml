@@ -41,7 +41,10 @@ jobs:
             # without this option script will return success regardless of testing result due to pipe after test command
             make test | tee ${TEST_RESULTS}/go-test.out
 
-      - setup_remote_docker
+      - setup_remote_docker:
+          reusable: true    # default - false
+          exclusive: true   # default - true
+
 
       # This should go into custom primary image, here's only for the sake of explanation
       - run:
@@ -61,9 +64,9 @@ jobs:
           name: Build and push Docker image
           command: |
             TAG="0.1.${CIRCLE_BUILD_NUM}"
-            docker build -t circleci/cci-demo-docker:$TAG .
+            docker build -t gerey/cci-demo-docker:$TAG .
             docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
-            docker push circleci/cci-demo-docker:$TAG
+            docker push gerey/cci-demo-docker:$TAG
 
       - store_artifacts:
           path: /tmp/test-results
