@@ -61,9 +61,9 @@ jobs:
           name: Build and push Docker image
           command: |
             TAG="0.1.${CIRCLE_BUILD_NUM}"
-            docker build -t circleci/cci-demo-docker:$TAG .
+            docker build -t gerey/cci-demo-docker:$TAG .
             docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
-            docker push circleci/cci-demo-docker:$TAG
+            docker push gerey/cci-demo-docker:$TAG
 
       - store_artifacts:
           path: /tmp/test-results
