@@ -41,7 +41,7 @@ jobs:
             # without this option script will return success regardless of testing result due to pipe after test command
             make test | tee ${TEST_RESULTS}/go-test.out
 
-      - setup_remote_docker
+      - setup_remote_docker:
           reusable: true    # default - false
           exclusive: true   # default - true
 
