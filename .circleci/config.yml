@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # using custom image, see .circleci/images/primary/Dockerfile
-      - image: circleci/cci-demo-docker-primary:0.0.2
+      - image: lyncos/cci-demo-docker-primary:0.0.2
       - image: postgres:9.4.1
         environment:
           POSTGRES_USER: ubuntu
