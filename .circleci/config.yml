@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # using custom image, see .circleci/images/primary/Dockerfile
-      - image: lyncos/cci-demo-docker-primary:0.0.2
+      - image: circleci/cci-demo-docker-primary:0.0.2
       - image: postgres:9.4.1
         environment:
           POSTGRES_USER: ubuntu
@@ -62,8 +62,8 @@ jobs:
           command: |
             TAG="0.1.${CIRCLE_BUILD_NUM}"
             docker build -t circleci/cci-demo-docker:$TAG .
-            docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
-            docker push circleci/cci-demo-docker:$TAG
+            #docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+            docker push lyncos/cci-demo-docker:$TAG
 
       - store_artifacts:
           path: /tmp/test-results
