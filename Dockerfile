@@ -1,6 +1,6 @@
 FROM alpine:3.5
 
-ADD ./workdir/contacts /usr/bin/contacts
-ADD ./db/migrations /migrations
+COPY ./workdir/contacts /usr/bin/contacts
+COPY ./db/migrations /migrations
 
 ENTRYPOINT contacts
