@@ -64,8 +64,8 @@ jobs:
             TAG="0.1.${CIRCLE_BUILD_NUM}"
             docker image build --tag "${DOCKER_IMAGE_NAME}:${TAG}" .
             # login credentials should be provided via context or project environment variables.
-            echo $DOCKER_PASSWORD | docker login docker.io --username $DOCKER_LOGIN --password-stdin
-            docker image push --all-tags $DOCKER_IMAGE_NAME
+            # echo $DOCKER_PASSWORD | docker login docker.io --username $DOCKER_LOGIN --password-stdin
+            # docker image push --all-tags $DOCKER_IMAGE_NAME
 
 workflows:
   main:
