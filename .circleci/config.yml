@@ -25,18 +25,14 @@ jobs:
       - run:
           name: Install go-junit-report
           command: |
-            go get github.com/jstemmer/go-junit-report
+            go install github.com/jstemmer/go-junit-report@v0.9.1
       - run:
           name: Run unit tests
           environment:
             DATABASE_URL: "postgres://ubuntu:4tRLFRDZ99tKHZEx@localhost:5432/contacts?sslmode=disable"
             DB_MIGRATIONS: /home/circleci/cci-demo-docker/db/migrations
           command: |
-            set -ou pipefail
-            trap "go-junit-report <${TEST_RESULTS}/go-test.out > ${TEST_RESULTS}/go-test-report.xml" EXIT
-            # Notice this `set -o pipefail`, this will cause script to fail if `make test` fails
-            # without this option script will return success regardless of testing result due to pipe after test command
-            make test | tee ${TEST_RESULTS}/go-test.out
+            make test 2>&1 | go-junit-report > "${TEST_RESULTS}/go-test-report.xml"
       - store_artifacts:
           path: /tmp/test-results
           destination: raw-test-output
