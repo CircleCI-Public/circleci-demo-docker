@@ -8,7 +8,8 @@ jobs:
         environment:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: contacts
-    working_directory: /go/src/github.com/circleci/cci-demo-docker
+          POSTGRES_PASSWORD: 4tRLFRDZ99tKHZEx
+    working_directory: ~/cci-demo-docker
     environment:
       TEST_RESULTS: /tmp/test-results
     steps:
@@ -28,8 +29,8 @@ jobs:
       - run:
           name: Run unit tests
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/contacts?sslmode=disable"
-            DB_MIGRATIONS: /go/src/github.com/circleci/cci-demo-docker/db/migrations
+            DATABASE_URL: "postgres://ubuntu:4tRLFRDZ99tKHZEx@localhost:5432/contacts?sslmode=disable"
+            DB_MIGRATIONS: /home/circleci/cci-demo-docker/db/migrations
           command: |
             set -ou pipefail
             trap "go-junit-report <${TEST_RESULTS}/go-test.out > ${TEST_RESULTS}/go-test-report.xml" EXIT
