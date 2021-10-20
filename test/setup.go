@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/circleci/cci-demo-docker/service"
+	"github.com/CircleCI-Public/circleci-demo-docker/service"
 	_ "github.com/mattes/migrate/driver/postgres"
 	"github.com/mattes/migrate/migrate"
 	"github.com/stretchr/testify/require"
