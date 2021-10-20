@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: cimg/go:1.16
+      - image: cimg/go:1.17
       - image: postgres:13.4-alpine
         environment:
           POSTGRES_USER: ubuntu
@@ -22,13 +22,6 @@ jobs:
           name: Set up test results folder
           command: |
             mkdir -p $TEST_RESULTS
-      - run:
-          name: Set GO111MODULE
-          command: |
-            # Workaround since our project does not build in module-aware mode.
-            # We will need to migrate for Go 1.17 onwards.
-            # See https://go.dev/blog/go116-module-changes
-            go env -w GO111MODULE=auto
       - run:
           name: Install go-junit-report
           command: |
@@ -51,7 +44,7 @@ jobs:
       # We technically do not need Go ecosystem in this job,
       # however, we are keeping this same as `build` job in an attempt
       # to exercise performance improvement through cached images in the workflow run.
-      - image: cimg/go:1.16
+      - image: cimg/go:1.17
     steps:
       - checkout
       - setup_remote_docker:
