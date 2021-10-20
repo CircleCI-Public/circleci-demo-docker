@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/CircleCI-Public/circleci-demo-docker/service"
-	_ "github.com/mattes/migrate/driver/postgres"
-	"github.com/mattes/migrate/migrate"
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 )
 
 func main() {
