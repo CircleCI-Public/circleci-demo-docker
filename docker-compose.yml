@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  contacts:
+    build: .
+    environment:
+      DATABASE_URL: postgres://ubuntu:4tRLFRDZ99tKHZEx@postgres:5432/contacts?sslmode=disable
+      DB_MIGRATIONS: "${PWD}/db/migrations"
+    ports:
+      - "8080:8080"
+
+  postgres:
+    image: postgres:13.4-alpine
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: contacts
+      POSTGRES_PASSWORD: 4tRLFRDZ99tKHZEx
