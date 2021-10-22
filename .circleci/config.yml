@@ -32,13 +32,12 @@ jobs:
             DATABASE_URL: "postgres://ubuntu:4tRLFRDZ99tKHZEx@localhost:5432/contacts?sslmode=disable"
             DB_MIGRATIONS: /home/circleci/cci-demo-docker/db/migrations
           command: |
-            make test
-            # | go-junit-report > "${TEST_RESULTS}/go-test-report.xml"
-      # - store_artifacts:
-      #     path: /tmp/test-results
-      #     destination: raw-test-output
-      # - store_test_results:
-      #     path: /tmp/test-results
+            make test | go-junit-report > "${TEST_RESULTS}/go-test-report.xml"
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: raw-test-output
+      - store_test_results:
+          path: /tmp/test-results
   push_image:
     docker:
       # We technically do not need Go ecosystem in this job,
