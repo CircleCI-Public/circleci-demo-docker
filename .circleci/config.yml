@@ -61,6 +61,7 @@ jobs:
           command: |
             TAG="0.1.${CIRCLE_BUILD_NUM}"
             docker image build --tag "${DOCKER_IMAGE_NAME}:${TAG}" .
+            # TODO: Uncomment the image push commands below when merged to upstream: github.com/CircleCI-Public/circleci-demo-docker
             # login credentials should be provided via context or project environment variables.
             # echo $DOCKER_PASSWORD | docker login docker.io --username $DOCKER_LOGIN --password-stdin
             # docker image push --all-tags $DOCKER_IMAGE_NAME
