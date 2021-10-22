@@ -38,6 +38,47 @@ jobs:
           destination: raw-test-output
       - store_test_results:
           path: /tmp/test-results
+  test_docker_compose:
+    docker:
+      - image: cimg/go:1.17
+    working_directory: ~/cci-demo-docker
+    steps:
+      - checkout
+      - setup_remote_docker:
+          # https://circleci.com/docs/2.0/building-docker-images/#docker-version
+          version: 20.10.7
+      - run:
+          # TODO: reduce/remove this
+          name: Build service (prior to Docker image build)
+          command: |
+            make
+      - run:
+          name: Spin up services with Docker Compose
+          command: |
+            # set project name for our services declared in Docker Compose
+            docker-compose --project-name circleci-demo-docker up -d
+            docker container ls
+
+      - run:
+          # Here, we make use of dockerize to wait on our application server
+          name: Wait on server to be ready
+          command: |
+            # Because we are using remote_docker, all docker-related activities run inside this remote container.
+            # In other words, the contacts server is not directly accessible to our primary container here.
+            # Hence, we will need to run the dockerize command in the same network in order to poll it.
+            # See https://circleci.com/docs/2.0/building-docker-images/#accessing-services
+            docker container run --network container:circleci-demo-docker_contacts_1 \
+              docker.io/jwilder/dockerize \
+              -wait http://localhost:8080 \
+              -wait-retry-interval 2s \
+              -timeout 20s
+      - run:
+          name: Healthcheck on our server
+          command: |
+            docker container run --network container:circleci-demo-docker_contacts_1 \
+              appropriate/curl \
+              --retry 10 --retry-delay 1 --retry-connrefused \
+              http://localhost:8080/contacts/test
   push_image:
     docker:
       # We technically do not need Go ecosystem in this job,
@@ -69,6 +110,8 @@ workflows:
   main:
     jobs:
       - test
+      - test_docker_compose
       - push_image:
           requires:
             - test
+            - test_docker_compose

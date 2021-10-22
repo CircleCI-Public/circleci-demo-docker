@@ -8,6 +8,8 @@ services:
       DB_MIGRATIONS: "${PWD}/db/migrations"
     ports:
       - "8080:8080"
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:13.4-alpine
