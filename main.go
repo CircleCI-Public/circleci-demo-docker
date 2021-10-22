@@ -9,6 +9,7 @@ import (
 	"github.com/CircleCI-Public/circleci-demo-docker/service"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func main() {
@@ -24,13 +25,15 @@ func SetupDB() *service.Database {
 		panic("CONTACTS_DB_URL must be set!")
 	}
 
-	sqlFiles := "./db/migrations"
-	if sqlFilesEnv := os.Getenv("CONTACTS_DB_MIGRATIONS"); sqlFilesEnv != "" {
-		sqlFiles = sqlFilesEnv
+	sqlFiles := os.Getenv("DB_MIGRATIONS")
+	if sqlFiles == "" {
+		panic("DB_MIGRATIONS must be set!")
 	}
-	allErrors, ok := migrate.ResetSync(databaseUrl, sqlFiles)
-	if !ok {
-		panic(fmt.Sprintf("%+v", allErrors))
+
+	sqlFileUrl := fmt.Sprintf("file://%s", sqlFiles)
+	_, err := migrate.New(sqlFileUrl, databaseUrl)
+	if err != nil {
+		panic(fmt.Sprintf("%+v", err))
 	}
 
 	db, err := sql.Open("postgres", databaseUrl)
@@ -38,5 +41,5 @@ func SetupDB() *service.Database {
 		panic(fmt.Sprintf("Unable to open DB connection: %+v", err))
 	}
 
-	return &service.Database{db}
+	return &service.Database{DB: db}
 }

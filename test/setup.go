@@ -2,6 +2,7 @@ package test
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http/httptest"
 	"os"
 	"testing"
@@ -9,6 +10,7 @@ import (
 	"github.com/CircleCI-Public/circleci-demo-docker/service"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/stretchr/testify/require"
 )
 
@@ -47,12 +49,22 @@ func SetupDB(t *testing.T) *service.Database {
 	databaseUrl := os.Getenv("DATABASE_URL")
 	require.NotEmpty(t, databaseUrl, "DATABASE_URL must be set!")
 
-	sqlFiles := "./db/migrations"
-	if sqlFilesEnv := os.Getenv("DB_MIGRATIONS"); sqlFilesEnv != "" {
-		sqlFiles = sqlFilesEnv
+	sqlFiles := os.Getenv("DB_MIGRATIONS")
+	require.NotEmpty(t, sqlFiles, "DB_MIGRATIONS must be set!")
+
+	sqlFileUrl := fmt.Sprintf("file://%s", sqlFiles)
+	m, err := migrate.New(sqlFileUrl, databaseUrl)
+	require.NoError(t, err, "Failed to start database migration")
+	v, _, _ := m.Version()
+	if v > 0 {
+		err = m.Down()
+		require.NoError(t, err, "Failed to reset database")
 	}
-	allErrors, ok := migrate.ResetSync(databaseUrl, sqlFiles)
-	require.True(t, ok, "Failed to migrate database %v", allErrors)
+
+	err = m.Up()
+	if err != nil && err != migrate.ErrNoChange {
+		require.Fail(t, "Failed to complete database migration")
+	}
 
 	db, err := sql.Open("postgres", databaseUrl)
 	require.NoError(t, err, "Error opening database")
