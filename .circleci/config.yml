@@ -22,6 +22,7 @@ jobs:
           name: Set up test results folder
           command: |
             mkdir -p $TEST_RESULTS
+      # TOOD: replace go-junit-report for test reports
       - run:
           name: Install go-junit-report
           command: |
@@ -32,7 +33,7 @@ jobs:
             DATABASE_URL: "postgres://ubuntu:4tRLFRDZ99tKHZEx@localhost:5432/contacts?sslmode=disable"
             DB_MIGRATIONS: /home/circleci/cci-demo-docker/db/migrations
           command: |
-            make test | go-junit-report > "${TEST_RESULTS}/go-test-report.xml"
+            go test -v ./... | go-junit-report > "${TEST_RESULTS}/go-test-report.xml"
       - store_artifacts:
           path: /tmp/test-results
           destination: raw-test-output
