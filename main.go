@@ -20,9 +20,9 @@ func main() {
 }
 
 func SetupDB() *service.Database {
-	databaseUrl := os.Getenv("CONTACTS_DB_URL")
+	databaseUrl := os.Getenv("DATABASE_URL")
 	if databaseUrl == "" {
-		panic("CONTACTS_DB_URL must be set!")
+		panic("DATABASE_URL must be set!")
 	}
 
 	sqlFiles := os.Getenv("DB_MIGRATIONS")

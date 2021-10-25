@@ -3,32 +3,27 @@
 set -e
 
 # check dependencies
-if [ -z "${DATABASE_URL}" ]
+if [ -z "${DATABASE_HOST}" ]
 then
-  echo "DATABASE_URL must be set"
+  echo "DATABASE_HOST must be set"
   exit 1
 fi
 
-if [ ! $(command -v dockerize) ]
+if [ -z "${DATABASE_PORT}" ]
 then
-  echo "dockerize not found"
-  exit 1
-fi
-
-if [ ! $(command -v python3) ]
-then
-  echo "python3 not found"
+  echo "DATABASE_PORT must be set"
   exit 1
 fi
 
 wait_for_database() {
-  local db_host=$(python3 -c "import os; from urllib.parse import urlparse; p = urlparse(os.environ['DATABASE_URL']); print(p.hostname)")
-  local db_port=$(python3 -c "import os; from urllib.parse import urlparse; p = urlparse(os.environ['DATABASE_URL']); print(p.port)")
-
-  echo "Waiting for database..."
-  dockerize -wait "tcp://${db_host}:${db_port}" -timeout 30s
-  echo "Detected that database is up!"
+  echo "Waiting for database"
+  while ! (telnet $DATABASE_HOST $DATABASE_PORT > /dev/null 2>&1); do
+    echo -n .
+    sleep 1
+  done
+  echo
 }
+
 
 if [ "$1" = "start" ]
 then
