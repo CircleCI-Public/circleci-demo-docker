@@ -57,10 +57,15 @@ jobs:
       - run:
           name: Healthcheck on our server
           command: |
+            # Because we are using remote_docker, all docker-related activities run inside this remote container.
+            # In other words, the contacts server is not directly accessible to our primary container here.
+            # Hence, we will need to run the dockerize command in the same network in order to poll it.
+            # See https://circleci.com/docs/2.0/building-docker-images/#accessing-services
             docker container run --network container:circleci-demo-docker_contacts_1 \
-              appropriate/curl \
-              --retry 10 --retry-delay 1 --retry-connrefused \
-              http://localhost:8080/healthcheck
+              docker.io/jwilder/dockerize \
+              -wait http://localhost:8080/healthcheck \
+              -wait-retry-interval 2s \
+              -timeout 20s
   push_image:
     docker:
       # We technically do not need Go ecosystem in this job,
