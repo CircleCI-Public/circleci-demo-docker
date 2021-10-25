@@ -86,6 +86,9 @@ jobs:
       - run:
           name: Build and push Docker image
           environment:
+            # NOTE: this project is under the CircleCI-Public GitHub organization,
+            # however, we will publish this image under the circleci Docker user account.
+            # See https://hub.docker.com/r/circleci/cci-demo-docker
             DOCKER_IMAGE_NAME: circleci/cci-demo-docker
           command: |
             TAG="0.1.${CIRCLE_BUILD_NUM}"
