@@ -112,3 +112,7 @@ func (db *Database) Write(writer TransactionFunc) (err error) {
 
 	return err
 }
+
+func (db *Database) Healthcheck() error {
+	return db.DB.Ping()
+}

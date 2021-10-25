@@ -43,6 +43,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (s *Server) setupRoutes() {
 	s.router.POST("/contacts", s.AddContact)
 	s.router.GET("/contacts/:email", s.GetContactByEmail)
+	s.router.GET("/healthcheck", s.Healthcheck)
 
 	// By default the router will handle errors. But the service should always return JSON if possible, so these
 	// custom handlers are added.
@@ -123,6 +124,19 @@ func (s *Server) GetContactByEmail(w http.ResponseWriter, r *http.Request, ps ht
 			&ContactResponse{
 				Contact: contact,
 			},
+		)
+	}
+}
+
+func (s *Server) Healthcheck(w http.ResponseWriter, r *http.Request, _ps httprouter.Params) {
+	err := s.db.Healthcheck()
+	if err != nil {
+		writeUnexpectedError(w, err)
+	} else {
+		writeJSON(
+			w,
+			http.StatusOK,
+			nil,
 		)
 	}
 }
