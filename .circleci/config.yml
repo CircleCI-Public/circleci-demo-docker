@@ -78,10 +78,6 @@ jobs:
           # https://circleci.com/docs/2.0/building-docker-images/#docker-version
           version: 20.10.7
       - run:
-          name: Build service
-          command: |
-            make
-      - run:
           name: Build and push Docker image
           environment:
             DOCKER_IMAGE_NAME: circleci/cci-demo-docker
