@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 set -e
 
@@ -16,7 +16,7 @@ then
 fi
 
 wait_for_database() {
-  echo "Waiting for database"
+  echo "Waiting for database @ ${DATABASE_HOST}:${DATABASE_PORT}"
   while ! (telnet $DATABASE_HOST $DATABASE_PORT > /dev/null 2>&1); do
     echo -n .
     sleep 1
@@ -24,13 +24,7 @@ wait_for_database() {
   echo
 }
 
-
-if [ "$1" = "start" ]
-then
-  echo "Initializing"
-  wait_for_database
-  echo "Starting"
-  contacts
-fi
-
-exec "$@"
+echo "Initializing"
+wait_for_database
+echo "Starting"
+./contacts

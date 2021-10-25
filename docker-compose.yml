@@ -4,10 +4,10 @@ services:
   contacts:
     build: .
     environment:
-      DATABASE_URL: postgres://ubuntu:4tRLFRDZ99tKHZEx@postgres:5432/contacts?sslmode=disable
+      DATABASE_URL: 'postgres://root:4tRLFRDZ99tKHZEx@postgres:5432/contacts?sslmode=disable'
       DATABASE_HOST: 'postgres'
       DATABASE_PORT: '5432'
-      DB_MIGRATIONS: "${PWD}/db/migrations"
+      DB_MIGRATIONS: "/migrations"
     ports:
       - "8080:8080"
     depends_on:

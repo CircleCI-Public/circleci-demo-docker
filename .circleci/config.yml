@@ -49,15 +49,10 @@ jobs:
           # https://circleci.com/docs/2.0/building-docker-images/#docker-version
           version: 20.10.7
       - run:
-          # TODO: reduce/remove this
-          name: Build service (prior to Docker image build)
-          command: |
-            make
-      - run:
           name: Spin up services with Docker Compose
           command: |
             # set project name for our services declared in Docker Compose
-            docker-compose --project-name circleci-demo-docker up -d
+            docker-compose --project-name circleci-demo-docker up --build -d
             docker container ls
 
       - run:

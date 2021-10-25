@@ -11,25 +11,20 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -v -o contacts
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -v -o contacts
 
-FROM gcr.io/distroless/base-debian10
+FROM alpine:3.13
+
+# Install dependencies such as telnet
+RUN apk update && apk add busybox-extras
 
 WORKDIR /
 
 COPY --from=build /app/contacts /contacts
 
-ADD ./db/migrations /migrations
-ADD docker-entrypoint.sh /
+COPY ./db/migrations /migrations
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 
 EXPOSE 8080
 
-# ENV DOCKERIZE_VERSION v0.6.1
-# RUN apt-get update && apt-get install -y wget
-# ENV DOCKERIZE_VERSION v0.6.1
-# RUN wget "https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz" \
-#     && tar -C /usr/local/bin -xzvf "dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz" \
-#     && rm "dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz"
-
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["start"]

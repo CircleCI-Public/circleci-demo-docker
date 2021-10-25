@@ -31,9 +31,22 @@ func SetupDB() *service.Database {
 	}
 
 	sqlFileUrl := fmt.Sprintf("file://%s", sqlFiles)
-	_, err := migrate.New(sqlFileUrl, databaseUrl)
+	m, err := migrate.New(sqlFileUrl, databaseUrl)
 	if err != nil {
 		panic(fmt.Sprintf("%+v", err))
+	}
+
+	v, _, _ := m.Version()
+	if v > 0 {
+		err = m.Down()
+		if err != nil {
+			panic(fmt.Sprintf("Failed to reset database: %+v", err))
+		}
+	}
+
+	err = m.Up()
+	if err != nil && err != migrate.ErrNoChange {
+		panic(fmt.Sprintf("Failed to complete database migration: %+v", err))
 	}
 
 	db, err := sql.Open("postgres", databaseUrl)
