@@ -50,8 +50,11 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          # https://circleci.com/docs/2.0/building-docker-images/#docker-version
+          # See https://circleci.com/docs/2.0/building-docker-images/#docker-version
           version: 20.10.7
+          # Make use of Docket Layer Caching (DLC) to speed up building of Docker images
+          # See https://circleci.com/docs/2.0/docker-layer-caching/
+          docker_layer_caching: true
       - run:
           name: Spin up services with Docker Compose
           command: |
@@ -75,8 +78,11 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          # https://circleci.com/docs/2.0/building-docker-images/#docker-version
+          # See https://circleci.com/docs/2.0/building-docker-images/#docker-version
           version: 20.10.7
+          # Make use of Docket Layer Caching (DLC) to speed up building of Docker images
+          # See https://circleci.com/docs/2.0/docker-layer-caching/
+          docker_layer_caching: true
       - run:
           name: Build and push Docker image
           environment:
