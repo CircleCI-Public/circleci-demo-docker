@@ -85,7 +85,6 @@ func (s *Server) AddContact(w http.ResponseWriter, r *http.Request, ps httproute
 	contactId, err := s.db.AddContact(contact)
 	if err != nil {
 		panic(err)
-		return
 	}
 	contact.Id = contactId
 
