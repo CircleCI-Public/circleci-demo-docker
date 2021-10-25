@@ -1,7 +1,12 @@
 version: 2.1
 
+executors:
+  go_1_17:
+    docker:
+      - image: cimg/go:1.17
+
 jobs:
-  test:
+  unit-tests:
     docker:
       - image: cimg/go:1.17
       - image: postgres:13.4-alpine
@@ -39,9 +44,8 @@ jobs:
           destination: raw-test-output
       - store_test_results:
           path: /tmp/test-results
-  test_docker_compose:
-    docker:
-      - image: cimg/go:1.17
+  spin-up-docker-compose:
+    executor: go_1_17
     working_directory: ~/cci-demo-docker
     steps:
       - checkout
@@ -66,12 +70,8 @@ jobs:
               -wait http://localhost:8080/healthcheck \
               -wait-retry-interval 2s \
               -timeout 20s
-  push_image:
-    docker:
-      # We technically do not need Go ecosystem in this job,
-      # however, we are keeping this same as `build` job in an attempt
-      # to exercise performance improvement through cached images in the workflow run.
-      - image: cimg/go:1.17
+  publish-docker-image:
+    executor: go_1_17
     steps:
       - checkout
       - setup_remote_docker:
@@ -92,9 +92,9 @@ jobs:
 workflows:
   main:
     jobs:
-      - test
-      - test_docker_compose
-      - push_image:
+      - unit-tests
+      - spin-up-docker-compose
+      - publish-docker-image:
           requires:
-            - test
-            - test_docker_compose
+            - unit-tests
+            - spin-up-docker-compose
