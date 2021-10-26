@@ -27,7 +27,7 @@ jobs:
           name: Set up test results folder
           command: |
             mkdir -p $TEST_RESULTS
-      # TOOD: replace go-junit-report for test reports
+      # TODO: replace go-junit-report for test reports
       - run:
           name: Install go-junit-report
           command: |
@@ -52,7 +52,7 @@ jobs:
       - setup_remote_docker:
           # See https://circleci.com/docs/2.0/building-docker-images/#docker-version
           version: 20.10.7
-          # Make use of Docket Layer Caching (DLC) to speed up building of Docker images
+          # Make use of Docker Layer Caching (DLC) to speed up building of Docker images
           # See https://circleci.com/docs/2.0/docker-layer-caching/
           docker_layer_caching: true
       - run:
@@ -80,7 +80,7 @@ jobs:
       - setup_remote_docker:
           # See https://circleci.com/docs/2.0/building-docker-images/#docker-version
           version: 20.10.7
-          # Make use of Docket Layer Caching (DLC) to speed up building of Docker images
+          # Make use of Docker Layer Caching (DLC) to speed up building of Docker images
           # See https://circleci.com/docs/2.0/docker-layer-caching/
           docker_layer_caching: true
       - run:
